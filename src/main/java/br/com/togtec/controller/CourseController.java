@@ -3,9 +3,9 @@ package br.com.togtec.controller;
 import br.com.togtec.model.Course;
 import br.com.togtec.repository.CourseRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +19,13 @@ public class CourseController {
     @GetMapping
     public List<Course> list() {
         return repository.findAll();
+    }
+
+    @PostMapping
+    public ResponseEntity<Course> create(@RequestBody Course course) {
+        //System.out.println(course.getName());
+        //return repository.save(course);
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(course));
     }
 
 }
