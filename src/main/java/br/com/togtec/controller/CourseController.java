@@ -1,11 +1,10 @@
 package br.com.togtec.controller;
 
 import br.com.togtec.model.Course;
-import br.com.togtec.repository.CourseRepository;
+import br.com.togtec.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,49 +15,46 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/courses")
-@AllArgsConstructor
 public class CourseController {
+    private final CourseService service;
 
-    private final CourseRepository repository;
+    public CourseController(CourseService service) {
+        this.service = service;
+    }
 
     @GetMapping
-    public List<Course> list() {
-        return repository.findAll();
+    public ResponseEntity<List<Course>> list() {
+        List<Course> courses = service.list();
+        return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> findById(@PathVariable @NotNull @Positive Long id) {
-        return repository.findById(id)
+        return service.findById(id)
                 .map(recordFound -> ResponseEntity.ok().body(recordFound))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Course> create(@RequestBody @Valid Course course) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(course));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(course));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Course> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course) {
-        return repository.findById(id)
+        return service.update(id, course)
                 .map(recordFound -> {
-                    recordFound.setName(course.getName());
-                    recordFound.setCategory(course.getCategory());
-
-                    Course updated = repository.save(recordFound);
-                    return ResponseEntity.ok().body(updated);
+                    return ResponseEntity.ok().body(recordFound);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive Long id) {
-        return repository.findById(id)
-                .map(recordFound -> {
-                    repository.deleteById(id);
-                    return ResponseEntity.noContent().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        if (service.delete(id)) {
+            return ResponseEntity.noContent().<Void>build();
+        }
+        return ResponseEntity.notFound().<Void>build();
     }
 
 }
