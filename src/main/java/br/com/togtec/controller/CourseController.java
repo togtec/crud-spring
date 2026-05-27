@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,38 +22,30 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Course>> list() {
-        List<Course> courses = service.list();
-        return ResponseEntity.ok(courses);
+    public List<Course> list() {
+        return service.list();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> findById(@PathVariable @NotNull @Positive Long id) {
-        return service.findById(id)
-                .map(recordFound -> ResponseEntity.ok().body(recordFound))
-                .orElse(ResponseEntity.notFound().build());
+    public Course findById(@PathVariable @NotNull @Positive Long id) {
+        return service.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Course> create(@RequestBody @Valid Course course) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(course));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Course create(@RequestBody @Valid Course course) {
+        return service.create(course);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course) {
-        return service.update(id, course)
-                .map(recordFound -> {
-                    return ResponseEntity.ok().body(recordFound);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public Course update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course) {
+        return service.update(id, course);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive Long id) {
-        if (service.delete(id)) {
-            return ResponseEntity.noContent().<Void>build();
-        }
-        return ResponseEntity.notFound().<Void>build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @NotNull @Positive Long id) {
+        service.delete(id);
     }
 
 }
