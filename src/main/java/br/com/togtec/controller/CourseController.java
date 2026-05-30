@@ -1,6 +1,6 @@
 package br.com.togtec.controller;
 
-import br.com.togtec.model.Course;
+import br.com.togtec.dto.CourseDTO;
 import br.com.togtec.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -22,24 +22,24 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<Course> list() {
+    public List<CourseDTO> list() {
         return service.list();
     }
 
     @GetMapping("/{id}")
-    public Course findById(@PathVariable @NotNull @Positive Long id) {
+    public CourseDTO findById(@PathVariable @NotNull @Positive Long id) {
         return service.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Course create(@RequestBody @Valid Course course) {
-        return service.create(course);
+    public CourseDTO create(@RequestBody @Valid @NotNull CourseDTO courseDTO) {
+        return service.create(courseDTO);
     }
 
     @PutMapping("/{id}")
-    public Course update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course) {
-        return service.update(id, course);
+    public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO courseDTO) {
+        return service.update(id, courseDTO);
     }
 
     @DeleteMapping("/{id}")
