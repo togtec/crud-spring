@@ -1,5 +1,6 @@
 package br.com.togtec;
 
+import br.com.togtec.enums.Category;
 import br.com.togtec.model.Course;
 import br.com.togtec.repository.CourseRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -21,8 +22,7 @@ public class CrudSpringApplication {
 
             Course c = new Course();
             c.setName("Angular com Spring Boot");
-            c.setName("Angular com Spring Boot");
-            c.setCategory("Front-End");
+            c.setCategory(Category.FRONT_END);
 
             repository.save(c);
         };

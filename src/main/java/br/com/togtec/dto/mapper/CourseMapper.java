@@ -1,6 +1,7 @@
 package br.com.togtec.dto.mapper;
 
 import br.com.togtec.dto.CourseDTO;
+import br.com.togtec.enums.Category;
 import br.com.togtec.model.Course;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ public class CourseMapper {
         if (course == null) {
             return null;
         }
-        return new CourseDTO(course.getId(), course.getName(), course.getCategory());
+        return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
     }
 
     public Course toEntity(CourseDTO courseDTO) {
@@ -20,11 +21,18 @@ public class CourseMapper {
         }
 
         Course course = new Course();
+
         if (courseDTO.id() != null) {
             course.setId(courseDTO.id());
         }
         course.setName(courseDTO.name());
-        course.setCategory(courseDTO.category());
+        course.setCategory( Category.fromValue(courseDTO.category()));
+
         return course;
     }
+
+    public Category toCategory(String value) {
+        return Category.fromValue(value);
+    }
+
 }

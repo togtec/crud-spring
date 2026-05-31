@@ -1,5 +1,9 @@
 package br.com.togtec.model;
 
+import br.com.togtec.enums.Category;
+import br.com.togtec.enums.Status;
+import br.com.togtec.enums.converters.CategoryConverter;
+import br.com.togtec.enums.converters.StatusConverter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -28,14 +32,12 @@ public class Course {
     private String name;
 
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "Back-End|Front-End")
     @Column(length = 10, nullable = false)
-    private String category;
+    @Convert(converter = CategoryConverter.class)
+    private Category category;
 
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "Active|Inactive")
     @Column(length = 10, nullable = false)
-    private String status = "Active";
+    @Convert(converter = StatusConverter.class)
+    private Status status = Status.ACTIVE;
 }
