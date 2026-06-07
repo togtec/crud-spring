@@ -4,6 +4,7 @@ import br.com.togtec.enums.Category;
 import br.com.togtec.enums.Status;
 import br.com.togtec.enums.converters.CategoryConverter;
 import br.com.togtec.enums.converters.StatusConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +46,5 @@ public class Course {
     private Status status = Status.ACTIVE;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
-    //@JoinColumn(name = "course_id")
     private List<Lesson> lessons = new ArrayList<>();
 }

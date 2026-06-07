@@ -22,17 +22,22 @@ public class CrudSpringApplication {
             repository.deleteAll();
 
             Course c = new Course();
-            c.setName("Angular com Spring Boot");
+            c.setName("Angular with Spring Boot");
             c.setCategory(Category.FRONT_END);
 
-            Lesson l = new Lesson();
-            l.setName("Introdução");
-            l.setYoutubeURL("Nb4uxLxdvxo");
-            l.setCourse(c);
-            c.getLessons().add(l);
+            Lesson l1 = new Lesson();
+            l1.setName("Introduction");
+            l1.setYoutubeURL("Nb4uxLxdvxo");
+            l1.setCourse(c);
+            c.getLessons().add(l1);
+
+            Lesson l2 = new Lesson();
+            l2.setName("Angular");
+            l2.setYoutubeURL("Ab1asLxdvxo");
+            l2.setCourse(c);
+            c.getLessons().add(l2);
 
             repository.save(c);
         };
     }
-
 }
